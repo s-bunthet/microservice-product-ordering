@@ -2,9 +2,7 @@ package io.github.sbunthet.orderservice.controller;
 
 import io.github.sbunthet.orderservice.dto.OrderRequest;
 import io.github.sbunthet.orderservice.dto.OrderResponse;
-import io.github.sbunthet.orderservice.model.Order;
 import io.github.sbunthet.orderservice.service.OrderService;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
