@@ -1,3 +1,4 @@
 /.idea/
 /product-service/target/
 /product-service/.mvn/
+/order-service/target/
