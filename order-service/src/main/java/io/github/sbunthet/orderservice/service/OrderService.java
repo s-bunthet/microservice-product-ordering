@@ -1,25 +1,47 @@
 package io.github.sbunthet.orderservice.service;
 
+import io.github.sbunthet.orderservice.dto.InventoryResponse;
 import io.github.sbunthet.orderservice.dto.OrderLineItemsResponse;
 import io.github.sbunthet.orderservice.dto.OrderRequest;
 import io.github.sbunthet.orderservice.dto.OrderResponse;
 import io.github.sbunthet.orderservice.model.Order;
 import io.github.sbunthet.orderservice.model.OrderLineItems;
 import io.github.sbunthet.orderservice.repository.OrderRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class OrderService {
 
     private final OrderRepository orderRepository;
+    private final WebClient webClient;
 
     public void placeOrder(OrderRequest orderRequest) {
         Order order = orderRequestToOrder(orderRequest);
-        orderRepository.save(order);
+
+        List<String> skuCodes =  order.getOrderLineItemsList().stream().map(OrderLineItems::getSkuCode).toList();
+
+        // call to the inventory service to check if the products are in stock
+        InventoryResponse[] inventoryResponseArray = webClient.get()
+                .uri("http://localhost:8083/api/inventory", uriBuilder -> uriBuilder.queryParam("skuCode", skuCodes).build())
+                .retrieve()
+                .bodyToMono(InventoryResponse[].class)
+                .block();
+
+        boolean allProductsInStock =  inventoryResponseArray != null &&  List.of(inventoryResponseArray).stream().allMatch(InventoryResponse::isInStock);
+
+        if(allProductsInStock){
+            orderRepository.save(order);
+        }else{
+            throw new IllegalArgumentException("Product is not in stock, please try again later");
+        }
+
 
     }
 

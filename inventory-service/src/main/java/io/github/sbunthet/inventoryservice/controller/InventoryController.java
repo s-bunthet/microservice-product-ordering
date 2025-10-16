@@ -1,25 +1,30 @@
 package io.github.sbunthet.inventoryservice.controller;
 
-import io.github.sbunthet.inventoryservice.repository.InventoryRepository;
+import io.github.sbunthet.inventoryservice.dto.InventoryResponse;
 import io.github.sbunthet.inventoryservice.service.InventoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController("/api/inventory")
+import java.util.List;
+
+@RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/inventory")
 public class InventoryController {
 
     private final InventoryService inventoryService;
 
-    @GetMapping("/{skuCode}")
+    @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public boolean isInStock(@RequestParam("skuCode") String skuCode) {
+    public List<InventoryResponse> isInStock(@RequestParam List<String> skuCode) {
         return inventoryService.isInStock(skuCode);
     }
+
+
 
 }

@@ -24,6 +24,7 @@ public class InventoryServiceApplication {
      * **/
     public CommandLineRunner loadData(InventoryRepository inventoryRepository) {
         return args -> {
+            inventoryRepository.deleteAll();
             inventoryRepository.save(new Inventory(null, "iphone-13", 100));
             inventoryRepository.save(new Inventory(null, "samsung-galaxy-s21", 50));
             inventoryRepository.save(new Inventory(null, "oneplus-9", 75));
