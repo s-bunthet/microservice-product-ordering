@@ -5,3 +5,5 @@ eureka:
   client.register-with-eureka: false # Disable self-registration as a service
   client.fetch-registry: false # Disable fetching registry ( since this is the server)
   server.enable-self-preservation: false # Disable self-preservation mode for development purposes
+  username: eureka
+  password: password

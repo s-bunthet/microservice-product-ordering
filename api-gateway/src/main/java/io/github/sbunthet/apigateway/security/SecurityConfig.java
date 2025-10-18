@@ -7,7 +7,7 @@ import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 
 @Configuration
-@EnableWebFluxSecurity // Use EnableWebFluxSecurity for WebFlux applications
+@EnableWebFluxSecurity // Use EnableWebFluxSecurity for WebFlux applications. Why? Because API Gateway uses Spring WebFlux.
 public class SecurityConfig {
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
