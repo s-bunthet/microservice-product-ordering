@@ -36,3 +36,8 @@ resilience4j.circuitbreaker:
       permitted-number-of-calls-in-half-open-state: 3 # Number of calls allowed in HALF_OPEN state to test if the service has recovered. If any of these calls fail, the circuit breaker transitions back to OPEN state.
       automatic-transition-from-open-to-half-open-enabled: true # Enable automatic transition from OPEN to HALF_OPEN state
 
+# resilience4j timeout configuration (explains how long to wait for a response before timing out)
+resilience4j.timelimiter:
+  instances:
+    orderServiceTimeLimiter:
+      timeoutDuration: 2s # Timeout duration of 2 seconds

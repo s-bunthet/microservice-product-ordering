@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @RestController
 @RequestMapping("/api/orders")
@@ -26,9 +27,9 @@ public class OrderController {
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
     @CircuitBreaker(name="inventory", fallbackMethod = "placeOrderFallback")
-    public void placeOrder(@RequestBody OrderRequest orderRequest) {
-        orderService.placeOrder(orderRequest);
-
+    @TimeLimiter(name="inventory") // implement Timout. The placeOrder methode will be executed in a separate thread. If it doesn't complete within the specified time limit, the fallback method will be triggered.
+    public CompletableFuture<String> placeOrder(@RequestBody OrderRequest orderRequest) {
+        return CompletableFuture.supplyAsync(()-> orderService.placeOrder(orderRequest)) ;
     }
 
     @GetMapping("/")
@@ -37,7 +38,7 @@ public class OrderController {
         return orderService.getOrders();
     }
 
-    public void placeOrderFallback(OrderRequest orderRequest, Throwable t) {
-        throw new IllegalStateException("Unable to place order at this time. Please try again later.", t);
+    public CompletableFuture<String> placeOrderFallback(OrderRequest orderRequest, Throwable t) {
+        return CompletableFuture.supplyAsync(()-> "Unable to place order at this time. Please try again later.");
     }
 }
