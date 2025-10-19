@@ -1,6 +1,7 @@
 package io.github.sbunthet.orderservice.controller;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
 import io.github.sbunthet.orderservice.dto.OrderRequest;
 import io.github.sbunthet.orderservice.dto.OrderResponse;
@@ -28,6 +29,7 @@ public class OrderController {
     @ResponseStatus(HttpStatus.CREATED)
     @CircuitBreaker(name="inventory", fallbackMethod = "placeOrderFallback")
     @TimeLimiter(name="inventory") // implement Timout. The placeOrder methode will be executed in a separate thread. If it doesn't complete within the specified time limit, the fallback method will be triggered.
+    @Retry(name="inventory")
     public CompletableFuture<String> placeOrder(@RequestBody OrderRequest orderRequest) {
         return CompletableFuture.supplyAsync(()-> orderService.placeOrder(orderRequest)) ;
     }

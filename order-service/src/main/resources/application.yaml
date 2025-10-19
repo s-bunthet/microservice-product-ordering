@@ -27,7 +27,7 @@ management:
 # resilience4j configuration
 resilience4j.circuitbreaker:
   instances:
-    orderServiceCircuitBreaker:
+    inventory:
       registerHealthIndicator: true # Enable health indicator for the circuit breaker
       sliding-window-type: COUNT_BASED # Use count-based sliding window.
       slidingWindowSize: 10 # Number of calls over which the circuit breaker calculates metrics like failure rate. The circuit breaker will evaluate the failure rate based on the last 10 calls.
@@ -39,5 +39,13 @@ resilience4j.circuitbreaker:
 # resilience4j timeout configuration (explains how long to wait for a response before timing out)
 resilience4j.timelimiter:
   instances:
-    orderServiceTimeLimiter:
+    inventory:
       timeoutDuration: 2s # Timeout duration of 2 seconds
+
+# resilience4j retry configuration: how many times to retry a failed call before giving up
+# It means that if a call to the inventory service fails, it will be retried up to 3 times with a wait duration of 500 milliseconds between each attempt.
+resilience4j.retry:
+  instances:
+    inventory:
+      max-attempts: 3 # Maximum number of retry attempts
+      wait-duration: 500ms # Wait duration between retry attempts
