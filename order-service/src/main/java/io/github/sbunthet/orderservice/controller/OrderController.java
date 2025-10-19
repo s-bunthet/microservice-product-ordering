@@ -1,5 +1,7 @@
 package io.github.sbunthet.orderservice.controller;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
 import io.github.sbunthet.orderservice.dto.OrderRequest;
 import io.github.sbunthet.orderservice.dto.OrderResponse;
 import io.github.sbunthet.orderservice.service.OrderService;
@@ -23,6 +25,7 @@ public class OrderController {
 
     @PostMapping("/")
     @ResponseStatus(HttpStatus.CREATED)
+    @CircuitBreaker(name="inventory", fallbackMethod = "placeOrderFallback")
     public void placeOrder(@RequestBody OrderRequest orderRequest) {
         orderService.placeOrder(orderRequest);
 
@@ -32,5 +35,9 @@ public class OrderController {
     @ResponseStatus(HttpStatus.OK)
     public List<OrderResponse> getOrders() {
         return orderService.getOrders();
+    }
+
+    public void placeOrderFallback(OrderRequest orderRequest, Throwable t) {
+        throw new IllegalStateException("Unable to place order at this time. Please try again later.", t);
     }
 }

@@ -28,7 +28,7 @@ public class SecurityConfig {
                 .password(eurekaPass)
                 .roles("USER")
                 .build();
-        return new InMemoryUserDetailsManager(user);
+        return new InMemoryUserDetailsManager(user); // In-memory user store during runtime
     }
 
     @Bean

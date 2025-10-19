@@ -11,3 +11,28 @@ eureka:
   client:
     service-url:
       defaultZone: http://eureka:password@localhost:8761/eureka/ # Eureka server URL with credentials (username-> eureka, password->  password)
+
+# Actuator configuration
+management:
+  health:
+    circuitbreakers:
+      enabled: true
+  endpoint:
+    web:
+      exposure:
+        include: all
+    health:
+      show-details: always
+
+# resilience4j configuration
+resilience4j.circuitbreaker:
+  instances:
+    orderServiceCircuitBreaker:
+      registerHealthIndicator: true # Enable health indicator for the circuit breaker
+      sliding-window-type: COUNT_BASED # Use count-based sliding window.
+      slidingWindowSize: 10 # Number of calls over which the circuit breaker calculates metrics like failure rate. The circuit breaker will evaluate the failure rate based on the last 10 calls.
+      failureRateThreshold: 50 # Percentage of failures to trip the circuit breaker
+      waitDurationInOpenState: 10000 # Time (in ms) to wait before transitioning from OPEN to HALF_OPEN state
+      permitted-number-of-calls-in-half-open-state: 3 # Number of calls allowed in HALF_OPEN state to test if the service has recovered. If any of these calls fail, the circuit breaker transitions back to OPEN state.
+      automatic-transition-from-open-to-half-open-enabled: true # Enable automatic transition from OPEN to HALF_OPEN state
+

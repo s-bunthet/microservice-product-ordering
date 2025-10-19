@@ -18,7 +18,7 @@ spring.cloud.gateway.server.webflux:
   # product service route
   routes[0]:
     id: product-service
-    uri: lb://product-service
+    uri: lb://product-service #lb:// for load balancing via Eureka
     predicates[0]: Path=/api/products/**
   # order service route
   routes[1]:
