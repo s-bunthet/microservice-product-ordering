@@ -50,7 +50,20 @@ resilience4j.retry:
       max-attempts: 3 # Maximum number of retry attempts
       wait-duration: 500ms # Wait duration between retry attempts
 
-# zipkin configuration for distributed tracing
+
 spring:
+  # zipkin configuration for distributed tracing
   zipkin:
     base-url: http://localhost:9411/
+
+  # kafka configuration
+  kafka:
+    bootstrap-servers: localhost:9092 # Kafka broker address
+    template:
+      default-topic: notificationTopic # Default topic for sending messages
+    producer: # Producer configuration
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer # Serializer for the message key.
+      value-serializer: org.apache.kafka.common.serialization.JsonSerializer # Serializer for the message value.
+      properties:
+        spring.json.type.mappings: # Mapping for JSON serialization
+          event: com.example.orderservice.event.OrderCreatedEvent

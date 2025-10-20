@@ -3,4 +3,5 @@
 /order-service/target/
 /inventory-service/target/
 /discovery-server/target/
-api-gateway/target/
+/api-gateway/target/
+/notification-service/target/
