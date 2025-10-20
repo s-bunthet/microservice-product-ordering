@@ -49,3 +49,8 @@ resilience4j.retry:
     inventory:
       max-attempts: 3 # Maximum number of retry attempts
       wait-duration: 500ms # Wait duration between retry attempts
+
+# zipkin configuration for distributed tracing
+spring:
+  zipkin:
+    base-url: http://localhost:9411/
