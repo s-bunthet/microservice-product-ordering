@@ -5,3 +5,4 @@
 /discovery-server/target/
 /api-gateway/target/
 /notification-service/target/
+/common-events/target/

@@ -2,11 +2,12 @@ package io.github.sbunthet.orderservice.service;
 
 import brave.Span;
 import brave.Tracer;
+
+import io.github.sbunthet.events.OrderPlacedEvent;
 import io.github.sbunthet.orderservice.dto.InventoryResponse;
 import io.github.sbunthet.orderservice.dto.OrderLineItemsResponse;
 import io.github.sbunthet.orderservice.dto.OrderRequest;
 import io.github.sbunthet.orderservice.dto.OrderResponse;
-import io.github.sbunthet.orderservice.event.OrderPlacedEvent;
 import io.github.sbunthet.orderservice.model.Order;
 import io.github.sbunthet.orderservice.model.OrderLineItems;
 import io.github.sbunthet.orderservice.repository.OrderRepository;
