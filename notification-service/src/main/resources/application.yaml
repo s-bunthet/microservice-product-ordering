@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: notification-service
+  # kafka configuration
+  kafka:
+    bootstrap-servers: localhost:9092 # Kafka broker address
+    template:
+      default-topic: notificationTopic # Default topic for sending messages
+    consumer: # Consumer configuration
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer # Deserializer for the message key.
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer  # Deserializer for the message value.
+      properties:
+        spring.json.trusted.packages: "*"
+        spring.json.default.type: io.github.sbunthet.events.OrderPlacedEvent
+      group-id: notificationId
+
+server:
+  port: 0 # Random port assignment
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka:password@localhost:8761/eureka/ # Eureka server URL with credentials (username-> eureka, password->  password)
+
+# zipkin configuration for distributed tracing
+management:
+  tracing:
+    sampling:
+      probability: 1.0   # Capture 100% of traces (for testing)
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans

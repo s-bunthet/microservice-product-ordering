@@ -12,8 +12,14 @@ eureka:
     service-url:
       defaultZone: http://eureka:password@localhost:8761/eureka/ # Eureka server URL with credentials (username-> eureka, password->  password)
 
-# Actuator configuration
+# Actuator and distributed tracing configuration
 management:
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans
+  tracing:
+    sampling:
+      probability: 1.0 # Capture 100% of traces (for testing)
   health:
     circuitbreakers:
       enabled: true
@@ -52,10 +58,6 @@ resilience4j.retry:
 
 
 spring:
-  # zipkin configuration for distributed tracing
-  zipkin:
-    base-url: http://localhost:9411/
-
   # kafka configuration
   kafka:
     bootstrap-servers: localhost:9092 # Kafka broker address

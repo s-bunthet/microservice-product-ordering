@@ -12,6 +12,10 @@ eureka:
       defaultZone: http://eureka:password@localhost:8761/eureka/ # Eureka server URL with credentials (username-> eureka, password->  password)
 
 # zipkin configuration for distributed tracing
-spring:
+management:
+  tracing:
+    sampling:
+      probability: 1.0   # Capture 100% of traces (for testing)
   zipkin:
-    base-url: http://localhost:9411/
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans
